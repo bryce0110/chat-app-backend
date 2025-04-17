@@ -14,7 +14,9 @@ defmodule ChatAppBackendWeb.RoomChannel do
   defp format_message(message) do
     %{
       name: message.name,
-      body: message.body
+      body: message.body,
+      uuid: message.uuid,
+      inserted_at: message.inserted_at,
     }
   end
 
@@ -31,10 +33,14 @@ defmodule ChatAppBackendWeb.RoomChannel do
   end
 
   def handle_in("new_msg", payload, socket) do
+    uuid = Ecto.UUID.generate()
+    payload = Map.put(payload, "uuid", uuid)
+    payload = Map.put(payload, "inserted_at", DateTime.utc_now())
+    payload = Map.put(payload, "updated_at", DateTime.utc_now())
     spawn(fn -> save_message(payload) end)
 
     broadcast!(socket, "new_msg", payload)
-    {:noreply, socket}
+    {:reply, :ok, socket} # TODO: Error Handling
   end
 
   # Channels can be used in a request/response fashion

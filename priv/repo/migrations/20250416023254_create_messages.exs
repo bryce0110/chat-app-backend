@@ -5,6 +5,7 @@ defmodule ChatAppBackend.Repo.Migrations.CreateMessages do
     create table(:messages) do
       add :name, :string
       add :body, :string
+      add :uuid, :uuid, null: false
 
       timestamps(type: :utc_datetime)
     end

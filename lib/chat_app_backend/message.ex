@@ -5,6 +5,7 @@ defmodule ChatAppBackend.Message do
   schema "messages" do
     field :name, :string
     field :body, :string
+    field :uuid, Ecto.UUID
 
     timestamps(type: :utc_datetime)
   end
@@ -12,8 +13,8 @@ defmodule ChatAppBackend.Message do
   @doc false
   def changeset(messages, attrs) do
     messages
-    |> cast(attrs, [:name, :body])
-    |> validate_required([:name, :body])
+    |> cast(attrs, [:name, :body, :uuid, :inserted_at, :updated_at])
+    |> validate_required([:name, :body, :uuid, :inserted_at, :updated_at])
   end
 
   def recent_messages(limit \\ 10) do
