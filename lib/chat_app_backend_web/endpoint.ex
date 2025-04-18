@@ -19,6 +19,12 @@ defmodule ChatAppBackendWeb.Endpoint do
     websocket: [connect_info: [session: @session_options]],
     longpoll: [connect_info: [session: @session_options]]
 
+
+  plug Corsica,
+    origins: ["http://localhost:1212"],
+    allow_headers: ["Authorization", "Content-Type"],
+    max_age: 600,
+    log: [reasons: [:invalid_origin, :invalid_method]]
   # Serve at "/" the static files from "priv/static" directory.
   #
   # When code reloading is disabled (e.g., in production),

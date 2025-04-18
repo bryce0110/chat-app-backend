@@ -12,6 +12,17 @@ defmodule ChatAppBackendWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug ChatAppBackendWeb.Plugs.FirebaseAuth
+  end
+
+  # TODO: Verify user authentication through firebase.
+  # Firebase auth plug?
+
+  scope "/api", ChatAppBackendWeb do
+    pipe_through :api
+
+    resources "/servers", ServerController, only: [:index, :create]
+    post "/servers/:server_id/join", ServerController, :join
   end
 
   scope "/", ChatAppBackendWeb do
